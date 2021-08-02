@@ -1,0 +1,19 @@
+{
+  "name": "nomadcoffee",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zipperdev/nomadcoffee-backend.git"
+  },
+  "keywords": [],
+  "author": "zipperdev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zipperdev/nomadcoffee-backend/issues"
+  },
+  "homepage": "https://github.com/zipperdev/nomadcoffee-backend#readme"
+}
