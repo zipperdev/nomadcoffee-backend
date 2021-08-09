@@ -7,6 +7,12 @@ export default gql`
         email: String!
         name: String!
         location: String!
+        followers(lastId: Int): [User]
+        following(lastId: Int): [User]
+        totalFollowers: Int!
+        totalFollowing: Int!
+        isFollowing: Boolean!
+        isMe: Boolean!
         avatarURL: String
         githubUsername: String
         createdAt: String!
