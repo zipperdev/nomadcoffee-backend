@@ -1,6 +1,6 @@
-import { createWriteStream } from "fs";
 import client from "../../client";
 import { protectedResolver } from "../../users/user.utils";
+import { getCategoryObj, getImageUrls } from "../coffeeShops.utils";
 
 const resolverFn = async (_, {
     name, 
@@ -13,36 +13,10 @@ const resolverFn = async (_, {
         let categoryObj = null;
         let photosObj = null;
         if (categories && categories !== []) {
-            categoryObj = categories.map(category => ({
-                where: {
-                    name: category
-                },
-                create: {
-                    name: category, 
-                    slug: category
-                }
-            }));
+            categoryObj = getCategoryObj(categories);
         };
         if (photos && photos !== []) {
-            let urlObj = [];
-            urlObj = await photos.map(async photo => {
-                const { filename, createReadStream } = await photo;
-                const randomFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
-                const readStream = createReadStream();
-                const writeStream = createWriteStream(`${process.cwd()}/uploads/${randomFilename}`);
-                readStream.pipe(writeStream);
-                const photoUrl = `http://localhost:4000/static/${randomFilename}`;
-                urlObj.push(photoUrl);
-                return urlObj;
-            });
-            photosObj = (await urlObj[0]).map(url => ({
-                where: {
-                    url
-                }, 
-                create: {
-                    url
-                }
-            }));
+            photosObj = await getImageUrls(photos, loggedInUser);
         };
         const coffeeShop = await client.coffeeShop.create({
             data: {
