@@ -12,6 +12,9 @@ generator client {
 
 model User {
   id             Int          @id @default(autoincrement())
+  socialId       Int?         @unique
+  loginType      String       @default("normal")
+  // loginType can be "normal" or "github" or "kakao" (String required)
   username       String       @unique
   email          String       @unique
   name           String

@@ -41,8 +41,7 @@ const resolverFn = async (_, {
             }
         });
         return coffeeShop;
-    } catch(error) {
-        console.log(error)
+    } catch {
         return null;
     };
 };

@@ -57,8 +57,7 @@ const resolverFn = async (_, {
                 success: true
             };
         };
-    } catch(error) {
-        console.log(error);
+    } catch {
         return {
             success: false, 
             error: "Cannot edit coffee shop."
