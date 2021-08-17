@@ -26,7 +26,7 @@ export const getCategoryObj = (categories) => {
         },
         create: {
             name: category, 
-            slug: category
+            slug: category.split("_").join(" ")
         }
     }));
 };

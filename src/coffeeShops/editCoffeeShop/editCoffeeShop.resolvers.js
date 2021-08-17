@@ -1,6 +1,6 @@
 import client from "../../client";
-import { getImageUrls } from "../coffeeShops.utils";
 import { protectedResolver } from "../../users/user.utils";
+import { getCategoryObj, getImageUrls } from "../coffeeShops.utils";
 
 const resolverFn = async (_, {
     id, 

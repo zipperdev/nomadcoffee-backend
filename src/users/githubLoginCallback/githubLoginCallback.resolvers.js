@@ -42,7 +42,7 @@ export default {
                 });
                 const emailObj = await getGithubEmailObj(githubUser.githubToken);
                 
-                const existUser = await client.user.findFirst({
+                const existGithubUser = await client.user.findFirst({
                     where: {
                         socialId: githubUser.clientId
                     }, 
@@ -52,13 +52,24 @@ export default {
                         email: true
                     }
                 });
+                const existUser = await client.user.findFirst({
+                    where: {
+                        email: emailObj.email, 
+                        loginType: "normal"
+                    }, 
+                    select: {
+                        id: true, 
+                        loginType: true, 
+                        email: true
+                    }
+                });
                 let createdUser = null;
-                if (existUser && existUser.loginType !== "github") {
+                if (existUser) {
                     return {
                         success: false, 
-                        error: `This account is logged in ${existUser.loginType === "normal" ? "on website" : "with kakaotalk"}, not with github.`
+                        error: "Please take another way to log in. The user is not logged in with github."
                     };
-                } else {
+                } else if (!existGithubUser) {
                     createdUser = await client.user.create({
                         data: {
                             username: `${githubUser.login}${Math.floor(Math.random() * 100) + parseInt(`${Math.ceil(Math.random() * 9)}` + "00")}`, 
@@ -73,18 +84,12 @@ export default {
                         }
                     });
                 };
-                const token = jwt.sign({ id: createdUser ? createdUser.id : existUser.id }, process.env.JWT_SECRET);
+                const token = jwt.sign({ id: createdUser ? createdUser.id : existGithubUser.id }, process.env.JWT_SECRET);
                 return {
                     success: true, 
                     token
                 };
-            } catch(error) {
-                if (error.field) {
-                    return {
-                        success: false, 
-                        error: `The ${error.field} is already taken.`
-                    };
-                };
+            } catch {
                 return {
                     success: false, 
                     error: "Cannot log in with Github."
