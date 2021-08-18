@@ -8,6 +8,6 @@ export default gql`
             longitude: String!
             photos: [Upload]
             categories: [String]
-        ): CoffeeShop
+        ): MutationResponse!
     }
 `;

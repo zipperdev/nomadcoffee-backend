@@ -18,7 +18,7 @@ const resolverFn = async (_, {
         if (photos && photos !== []) {
             photosObj = await getImageUrls(photos, loggedInUser);
         };
-        const coffeeShop = await client.coffeeShop.create({
+        await client.coffeeShop.create({
             data: {
                 name, 
                 latitude, 
@@ -40,9 +40,14 @@ const resolverFn = async (_, {
                 })
             }
         });
-        return coffeeShop;
+        return {
+            success: true
+        };
     } catch {
-        return null;
+        return {
+            success: false, 
+            error: "Cannot create coffee shop."
+        };
     };
 };
 
