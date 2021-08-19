@@ -1,4 +1,5 @@
 import client from "../../client";
+import { removeS3 } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/user.utils";
 
 const resolverFn = async (_, { id }, { loggedInUser }) => {
@@ -18,6 +19,25 @@ const resolverFn = async (_, { id }, { loggedInUser }) => {
             error: "Please log in as owner."
         };
     } else {
+        const removePhotos = await client.coffeeShopPhoto.findMany({
+            where: {
+                shopId: coffeeShop.id
+            }, 
+            select: {
+                url: true
+            }
+        });
+
+        removePhotos.forEach(async photo => {
+            await removeS3(photo.url);
+        });
+
+        await client.coffeeShopPhoto.deleteMany({
+            where: {
+                shopId: coffeeShop.id
+            }
+        });
+
         await client.coffeeShop.delete({
             where: {
                 id
