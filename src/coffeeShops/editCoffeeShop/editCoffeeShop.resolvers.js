@@ -11,15 +11,26 @@ const resolverFn = async (_, {
     categories
 }, { loggedInUser }) => {
     try {
-        const coffeeShopOwner = (await client.coffeeShop.findUnique({
+        const coffeeShop = await client.coffeeShop.findUnique({
             where: {
                 id
             }, 
-            select: {
-                user: true
+            include: {
+                user: true, 
+                categories: {
+                    select: {
+                        id: true
+                    }
+                }, 
+                photos: {
+                    select: {
+                        id: true, 
+                        url: true
+                    }
+                }
             }
-        })).user;
-        if (loggedInUser.id !== coffeeShopOwner.id) {
+        });
+        if (loggedInUser.id !== coffeeShop.userId) {
             return {
                 success: false, 
                 error: "You are not owner."
@@ -41,23 +52,23 @@ const resolverFn = async (_, {
                     name, 
                     latitude, 
                     longitude, 
-                    ...(categoryObj?.length > 0 && {
-                        categories: {
-                            connectOrCreate: categoryObj
-                        }
-                    }), 
-                    ...(photosObj?.length > 0 && {
-                        photos: {
-                            connectOrCreate: photosObj
-                        }
-                    })
+                    categories: {
+                        connectOrCreate: categoryObj, 
+                        ...(categories && {
+                            disconnect: coffeeShop.categories
+                        })
+                    }, 
+                    photos: {
+                        connectOrCreate: photosObj
+                    }
                 }
             });
             return {
                 success: true
             };
         };
-    } catch {
+    } catch(error) {
+        console.log(error)
         return {
             success: false, 
             error: "Cannot edit coffee shop."
