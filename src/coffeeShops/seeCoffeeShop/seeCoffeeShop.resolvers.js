@@ -5,6 +5,11 @@ export default {
         seeCoffeeShop: (_, { id }) => client.coffeeShop.findUnique({
             where: {
                 id
+            }, 
+            include: {
+                user: true, 
+                photos: true, 
+                categories: true
             }
         })
     }

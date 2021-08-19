@@ -38,6 +38,11 @@ const resolverFn = async (_, {
                         connectOrCreate: photosObj
                     }
                 })
+            }, 
+            include: {
+                user: true, 
+                photos: true, 
+                categories: true
             }
         });
         return {
