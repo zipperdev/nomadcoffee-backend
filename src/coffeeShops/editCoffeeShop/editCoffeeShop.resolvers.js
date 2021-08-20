@@ -1,4 +1,5 @@
 import client from "../../client";
+import { removeS3 } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/user.utils";
 import { getCategoryObj, getImageUrls } from "../coffeeShops.utils";
 
@@ -24,7 +25,7 @@ const resolverFn = async (_, {
                 }, 
                 photos: {
                     select: {
-                        id: true, 
+                        id: true,
                         url: true
                     }
                 }
@@ -42,6 +43,15 @@ const resolverFn = async (_, {
                 categoryObj = getCategoryObj(categories);
             };
             if (photos && photos !== []) {
+                for (let i = 0; i < coffeeShop.photos.length; i++) {
+                    const photo = coffeeShop.photos[i];
+                    await client.coffeeShopPhoto.delete({
+                        where: {
+                            id: photo.id
+                        }
+                    });
+                    await removeS3(photo.url);
+                };
                 photosObj = await getImageUrls(photos, loggedInUser);
             };
             await client.coffeeShop.update({
@@ -52,23 +62,24 @@ const resolverFn = async (_, {
                     name, 
                     latitude, 
                     longitude, 
-                    categories: {
-                        connectOrCreate: categoryObj, 
-                        ...(categories && {
+                    ...(categories && {
+                        categories: {
+                            connectOrCreate: categoryObj, 
                             disconnect: coffeeShop.categories
-                        })
-                    }, 
-                    photos: {
-                        connectOrCreate: photosObj
-                    }
+                        }
+                    }), 
+                    ...(photos && {
+                        photos: {
+                            connectOrCreate: photosObj
+                        }
+                    })
                 }
             });
             return {
                 success: true
             };
         };
-    } catch(error) {
-        console.log(error)
+    } catch {
         return {
             success: false, 
             error: "Cannot edit coffee shop."
