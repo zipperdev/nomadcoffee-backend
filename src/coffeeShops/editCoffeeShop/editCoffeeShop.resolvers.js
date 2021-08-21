@@ -20,7 +20,7 @@ const resolverFn = async (_, {
                 user: true, 
                 categories: {
                     select: {
-                        id: true
+                        name: true
                     }
                 }, 
                 photos: {
@@ -38,9 +38,12 @@ const resolverFn = async (_, {
             };
         } else {
             let categoryObj = null;
+            let disconnectCategoryObj = null;
             let photosObj = null;
             if (categories[0]) {
                 categoryObj = getCategoryObj(categories);
+                disconnectCategoryObj = coffeeShop.categories;
+                disconnectCategoryObj = disconnectCategoryObj.map(value => value.name).filter(value => !categories.includes(value)).map(value => ({ name: value }));
             };
             if (photos[0]) {
                 for (let i = 0; i < coffeeShop.photos.length; i++) {
@@ -64,7 +67,7 @@ const resolverFn = async (_, {
                     longitude, 
                     categories: {
                         connectOrCreate: categoryObj, 
-                        disconnect: coffeeShop.categories
+                        disconnect: disconnectCategoryObj
                     }, 
                     ...(photosObj && {
                         photos: {
@@ -77,7 +80,8 @@ const resolverFn = async (_, {
                 success: true
             };
         };
-    } catch {
+    } catch(error) {
+        console.log(error)
         return {
             success: false, 
             error: "Cannot edit coffee shop."
