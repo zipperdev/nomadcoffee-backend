@@ -39,10 +39,10 @@ const resolverFn = async (_, {
         } else {
             let categoryObj = null;
             let photosObj = null;
-            if (categories && categories !== []) {
+            if (categories[0]) {
                 categoryObj = getCategoryObj(categories);
             };
-            if (photos && photos !== []) {
+            if (photos[0]) {
                 for (let i = 0; i < coffeeShop.photos.length; i++) {
                     const photo = coffeeShop.photos[i];
                     await client.coffeeShopPhoto.delete({
@@ -62,13 +62,11 @@ const resolverFn = async (_, {
                     name, 
                     latitude, 
                     longitude, 
-                    ...(categories && {
-                        categories: {
-                            connectOrCreate: categoryObj, 
-                            disconnect: coffeeShop.categories
-                        }
-                    }), 
-                    ...(photos && {
+                    categories: {
+                        connectOrCreate: categoryObj, 
+                        disconnect: coffeeShop.categories
+                    }, 
+                    ...(photosObj && {
                         photos: {
                             connectOrCreate: photosObj
                         }
