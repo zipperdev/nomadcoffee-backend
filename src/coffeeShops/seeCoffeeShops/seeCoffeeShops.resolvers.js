@@ -10,9 +10,6 @@ export default {
                 user: true, 
                 photos: true, 
                 categories: true
-            }, 
-            orderBy: {
-                createdAt: "desc"
             }
         })
     }
