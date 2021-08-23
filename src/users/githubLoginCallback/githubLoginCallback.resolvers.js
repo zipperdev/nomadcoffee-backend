@@ -44,7 +44,7 @@ export default {
                 
                 const existGithubUser = await client.user.findFirst({
                     where: {
-                        socialId: githubUser.clientId
+                        socialId: githubUser.id
                     }, 
                     select: {
                         id: true, 
@@ -74,9 +74,9 @@ export default {
                         data: {
                             username: `${githubUser.login}${Math.floor(Math.random() * 100) + parseInt(`${Math.ceil(Math.random() * 9)}` + "00")}`, 
                             email: emailObj.email, 
-                            name: githubUser.name, 
+                            name: githubUser.name ? githubUser.name : githubUser.login, 
+                            location: githubUser.location ? githubUser.location : "Unknown", 
                             password: "none", 
-                            location: githubUser.location, 
                             avatarURL: githubUser.avatar_url, 
                             githubUsername: githubUser.login, 
                             socialId: githubUser.id, 
