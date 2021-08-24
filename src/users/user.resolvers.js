@@ -10,7 +10,7 @@ export default {
                     }
                 }
             }, 
-            take: 10, 
+            take: 20, 
             skip: lastId ? 1 : 0, 
             ...(lastId && { cursor: { id: lastId } })
         }), 
@@ -22,7 +22,7 @@ export default {
                     }
                 }
             }, 
-            take: 10, 
+            take: 20, 
             skip: lastId ? 1 : 0, 
             ...(lastId && { cursor: { id: lastId } })
         }), 
@@ -61,6 +61,14 @@ export default {
                 return Boolean(exist);
             };
         }, 
-        isMe: ({ id }, _, { loggedInUser }) => id === loggedInUser?.id
+        isMe: ({ id }, _, { loggedInUser }) => id === loggedInUser?.id, 
+        coffeeShops: ({ id }, { lastId }) => client.coffeeShop.findMany({
+            where: {
+                userId: id
+            }, 
+            take: 10, 
+            skip: lastId ? 1 : 0, 
+            ...(lastId && { cursor: { id: lastId } })
+        })
     }
 };

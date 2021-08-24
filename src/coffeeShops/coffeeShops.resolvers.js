@@ -10,7 +10,7 @@ export default {
                     }
                 }
             }, 
-            take: 30, 
+            take: 10, 
             skip: lastId ? 1 : 0, 
             ...(lastId && { cursor: { id: lastId } })
         }), 

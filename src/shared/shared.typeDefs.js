@@ -7,4 +7,17 @@ export default gql`
         success: Boolean!
         error: String
     }
+
+    type SearchResponse {
+        users: [User]
+        coffeeShops: [CoffeeShop]
+    }
+
+    type Query {
+        search(
+            keyword: String!, 
+            userLastId: Int, 
+            coffeeShopLastId: Int
+        ): SearchResponse!
+    }
 `;

@@ -13,6 +13,7 @@ export default gql`
         totalFollowing: Int!
         isFollowing: Boolean!
         isMe: Boolean!
+        coffeeShops: [CoffeeShop]
         avatarURL: String
         githubUsername: String
         createdAt: String!
