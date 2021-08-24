@@ -25,6 +25,9 @@ export default {
                         }
                     ]
                 }, 
+                orderBy: {
+                    createdAt: "desc"
+                }, 
                 take: 20, 
                 skip: userLastId ? 1 : 0, 
                 ...(userLastId && { cursor: { id: userLastId } })
@@ -73,6 +76,9 @@ export default {
                     user: true, 
                     photos: true, 
                     categories: true
+                }, 
+                orderBy: {
+                    createdAt: "desc"
                 }, 
                 take: 10, 
                 skip: coffeeShopLastId ? 1 : 0, 
