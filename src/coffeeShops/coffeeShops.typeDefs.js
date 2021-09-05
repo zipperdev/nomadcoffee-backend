@@ -15,6 +15,8 @@ export default gql`
         latitude: String!
         longitude: String!
         user: User!
+        likes: Int!
+        saves: Int!
         photos: [CoffeeShopPhoto]
         categories: [Category]
         createdAt: String!
@@ -27,6 +29,14 @@ export default gql`
         slug: String
         shops(lastId: Int): [CoffeeShop]
         totalShops: Int!
+        createdAt: String!
+        updatedAt: String!
+    }
+
+    type Save {
+        id: Int!
+        user: User!
+        coffeeShop: CoffeeShop!
         createdAt: String!
         updatedAt: String!
     }

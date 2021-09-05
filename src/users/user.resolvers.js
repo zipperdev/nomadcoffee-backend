@@ -2,6 +2,17 @@ import client from "../client";
 
 export default {
     User: {
+        saves: ({ id }, { lastId }) => client.save.findMany({
+            where: {
+                coffeeShopId: id
+            }, 
+            orderBy: {
+                createdAt: "desc"
+            }, 
+            take: 15, 
+            skip: lastId ? 1 : 0, 
+            ...(lastId && { cursor: { id: lastId } })
+        }), 
         followers: ({ id }, { lastId }) => client.user.findMany({
             where: {
                 following: {
@@ -25,6 +36,11 @@ export default {
             take: 20, 
             skip: lastId ? 1 : 0, 
             ...(lastId && { cursor: { id: lastId } })
+        }), 
+        totalSaves: ({ id }) => client.save.count({
+            where: {
+                coffeeShopId: id
+            }
         }), 
         totalFollowers: ({ id }) => client.user.count({
             where: {

@@ -1,6 +1,18 @@
 import client from "../client";
 
 export default {
+    CoffeeShop: {
+        likes: ({ id }) => client.like.count({
+            where: {
+                coffeeShopId: id
+            }
+        }), 
+        saves: ({ id }) => client.save.count({
+            where: {
+                coffeeShopId: id
+            }
+        })
+    }, 
     Category: {
         shops: ({ id }, { lastId }) => client.coffeeShop.findMany({
             where: {

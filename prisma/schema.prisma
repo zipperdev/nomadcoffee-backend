@@ -20,6 +20,8 @@ model User {
   name           String
   location       String
   password       String
+  likes          Like[]
+  saves          Save[]
   followers      User[]       @relation("FollowRelation", references: [id])
   following      User[]       @relation("FollowRelation", references: [id])
   avatarURL      String?
@@ -43,8 +45,10 @@ model CoffeeShop {
   name       String
   latitude   String
   longitude  String
-  user       User              @relation(fields: [userId], references: [id])
   userId     Int
+  user       User              @relation(fields: [userId], references: [id])
+  likes      Like[]
+  saves      Save[]
   photos     CoffeeShopPhoto[]
   categories Category[]
   createdAt  DateTime          @default(now())
@@ -58,4 +62,28 @@ model Category {
   shops     CoffeeShop[]
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
+}
+
+model Like {
+  id           Int        @id @default(autoincrement())
+  userId       Int
+  coffeeShopId Int
+  user         User       @relation(fields: [userId], references: [id])
+  coffeeShop   CoffeeShop @relation(fields: [coffeeShopId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([userId, coffeeShopId])
+}
+
+model Save {
+  id           Int        @id @default(autoincrement())
+  userId       Int
+  coffeeShopId Int
+  user         User       @relation(fields: [userId], references: [id])
+  coffeeShop   CoffeeShop @relation(fields: [coffeeShopId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([userId, coffeeShopId])
 }

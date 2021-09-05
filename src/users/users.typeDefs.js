@@ -7,8 +7,10 @@ export default gql`
         email: String!
         name: String!
         location: String!
+        saves(lastId: Int): [Save]
         followers(lastId: Int): [User]
         following(lastId: Int): [User]
+        totalSaves: Int!
         totalFollowers: Int!
         totalFollowing: Int!
         isFollowing: Boolean!
